@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.mycompany.pensiunan.controller.loginController"
+            stylesheets="@login.css">
+
+    <center>
+        <VBox fx:id="contentBox"
+              alignment="CENTER"
+              spacing="24"
+              maxWidth="420"
+              styleClass="content-wrapper">
+
+            <!-- Judul -->
+            <Text text="LOGIN SISTEM" styleClass="title-text"/>
+            <Text text="Pembayaran Pensiunan PT GRAHADI" styleClass="subtitle-text"/>
+
+            <!-- Card -->
+            <VBox spacing="16" styleClass="login-card">
+                <TextField promptText="Username" styleClass="input-field"/>
+                <PasswordField promptText="Password" styleClass="input-field"/>
+                <Button text="LOGIN" styleClass="login-button"/>
+            </VBox>
+
+        </VBox>
+    </center>
+
+</BorderPane>
+
