@@ -4,8 +4,9 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.mycompany.pensiunan.controller.loginController"
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.mycompany.pensiunan.controller.LoginController"
             stylesheets="@login.css">
 
     <center>
@@ -15,19 +16,24 @@
               maxWidth="420"
               styleClass="content-wrapper">
 
-            <!-- Judul -->
             <Text text="LOGIN SISTEM" styleClass="title-text"/>
             <Text text="Pembayaran Pensiunan PT GRAHADI" styleClass="subtitle-text"/>
 
-            <!-- Card -->
             <VBox spacing="16" styleClass="login-card">
-                <TextField promptText="Username" styleClass="input-field"/>
-                <PasswordField promptText="Password" styleClass="input-field"/>
-                <Button text="LOGIN" styleClass="login-button"/>
+                <TextField fx:id="usernameField"
+                           promptText="Username"
+                           styleClass="input-field"/>
+
+                <PasswordField fx:id="passwordField"
+                               promptText="Password"
+                               styleClass="input-field"/>
+
+                <Button text="LOGIN"
+                        onAction="#handleLogin"
+                        styleClass="login-button"/>
             </VBox>
 
         </VBox>
     </center>
 
 </BorderPane>
-
