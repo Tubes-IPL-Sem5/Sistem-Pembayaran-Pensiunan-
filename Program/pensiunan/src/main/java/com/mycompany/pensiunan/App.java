@@ -9,11 +9,10 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        // Ganti baris di bawah ini agar mengarah ke DashboardView.fxml kamu
         Scene scene = new Scene(
             FXMLLoader.load(
                 getClass().getResource(
-                    "/fxml/DashboardView.fxml" 
+                    "/com/mycompany/pensiunan/view/login/loginView.fxml"
                 )
             )
         );
@@ -22,7 +21,7 @@ public class App extends Application {
         stage.setWidth(1000);   
         stage.setHeight(700); 
 
-        stage.setTitle("Dashboard Pensiunan - Sistem Pembayaran");
+        stage.setTitle("Sistem Pembayaran Pensiunan");
         stage.show();
     }
 
