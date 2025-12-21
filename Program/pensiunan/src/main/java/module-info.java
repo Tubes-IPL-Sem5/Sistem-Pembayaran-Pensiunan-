@@ -4,6 +4,7 @@ module com.mycompany.pensiunan {
     requires spring.security.crypto; 
     requires javafx.controls;
     requires javafx.fxml;
+    requires java.base;
     exports com.mycompany.pensiunan;
     exports com.mycompany.pensiunan.model; 
     exports com.mycompany.pensiunan.service; 
