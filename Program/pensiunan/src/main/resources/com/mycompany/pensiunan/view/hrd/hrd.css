@@ -1,0 +1,33 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : 27 Dec 2025, 18.51.11
+    Author     : Rifqii
+*/
+
+.sidebar {
+    -fx-background-color: #2D5A43; /* Hijau Tua Sidebar */
+    -fx-pref-width: 60;
+    -fx-padding: 20 0;
+}
+
+.header {
+    -fx-background-color: #62947A; /* Hijau Muda Header */
+    -fx-padding: 15;
+}
+
+.nav-item { -fx-text-fill: white; -fx-font-weight: bold; }
+
+.custom-table {
+    -fx-background-color: #8C8C8C; /* Background Abu-abu Tabel */
+    -fx-background-radius: 15;
+}
+
+.btn-action {
+    -fx-background-color: #FFD700; /* Kuning tombol Persetujuan */
+    -fx-text-fill: black;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+}
