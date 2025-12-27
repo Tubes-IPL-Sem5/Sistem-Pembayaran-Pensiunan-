@@ -1,4 +1,4 @@
-package com.pensiun.keuangan;
+package com.mycompany.Keuangan;
 
 import javafx.beans.property.*;
 

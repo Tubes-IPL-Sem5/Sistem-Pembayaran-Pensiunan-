@@ -3,7 +3,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 
-<StackPane prefHeight="600.0" prefWidth="900.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.pensiun.keuangan.HelloController">
+<StackPane prefHeight="600.0" prefWidth="900.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.Keuangan.HelloController">
     <HBox>
         <VBox prefWidth="80" style="-fx-background-color: #2D7D52;" alignment="TOP_CENTER" spacing="30">
             <padding><Insets top="20"/></padding>
