@@ -12,9 +12,5 @@ module com.mycompany.pensiunan {
   
 
     opens com.mycompany.pensiunan.controller to javafx.fxml;
-    opens com.mycompany.pensiunan.model to javafx.base; // Penting untuk TableView
-    
-    exports com.mycompany.pensiunan;
-    exports com.mycompany.pensiunan.controller;
-    exports com.mycompany.pensiunan.model;
+    opens com.mycompany.pensiunan.model to javafx.base;
 }

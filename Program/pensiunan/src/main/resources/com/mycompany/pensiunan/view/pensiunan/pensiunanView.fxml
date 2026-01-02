@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.Region?>
+
+<BorderPane xmlns="http://javafx.com/javafx/25"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.mycompany.pensiunan.controller.DasboardPensiunanController"
+            prefWidth="1200" prefHeight="700">
+    
+    <!-- SIDEBAR -->
+    <left>
+        <VBox spacing="20" style="-fx-background-color:#2e8b57; -fx-padding:15; -fx-min-width:90px;">
+            <Button style="-fx-background-color:white; -fx-background-radius:8; -fx-pref-width:50; -fx-pref-height:50; -fx-font-size:20px;" text="👤"/>
+            <Region VBox.vgrow="ALWAYS"/>
+            <Button style="-fx-background-color:white; -fx-background-radius:8; -fx-pref-width:50; -fx-pref-height:50; -fx-font-size:20px;" text="⚙"/>
+            <Button style="-fx-background-color:white; -fx-background-radius:8; -fx-pref-width:50; -fx-pref-height:50; -fx-font-size:20px;" text="⎋"/>
+        </VBox>
+    </left>
+    
+    <!-- MAIN CONTENT AREA -->
+    <center>
+        <BorderPane>
+            <!-- HEADER -->
+            <top>
+                <HBox spacing="20" alignment="CENTER_LEFT" style="-fx-background-color:#5fa37b; -fx-padding:15 30;">
+                    <Label fx:id="lblNama" text="Jack Lang" style="-fx-text-fill:white; -fx-font-size:18px; -fx-font-weight:bold;" />
+                    <Region HBox.hgrow="ALWAYS"/>
+<!--                <Label text="Home" style="-fx-text-fill:white; -fx-font-size:14px; -fx-cursor:hand;" />
+                    <Label text="Service" style="-fx-text-fill:white; -fx-font-size:14px; -fx-cursor:hand;" />
+                    <Label text="Contact" style="-fx-text-fill:white; -fx-font-size:14px; -fx-cursor:hand;" />-->
+                </HBox>
+            </top>
+            
+            <!-- CENTER CONTENT -->
+            <center>
+                <AnchorPane style="-fx-background-color:#f5f5f5;">
+                    <!-- Vertical separator line -->
+                    <VBox layoutX="30" layoutY="30" prefWidth="2" prefHeight="500" style="-fx-background-color:#cccccc;"/>
+                    
+                    <!-- Content container -->
+                    <VBox alignment="TOP_CENTER" layoutX="250" layoutY="80" spacing="40" AnchorPane.topAnchor="80" AnchorPane.leftAnchor="250">
+                        <!-- CARD SISA GAJI -->
+                        <AnchorPane prefWidth="320" prefHeight="130" style="-fx-background-color:#6b92d1; -fx-background-radius:15; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 3);">
+                            <Label text="Sisa Gaji Pensiunan" layoutX="20" layoutY="20" style="-fx-text-fill:white; -fx-font-size:14px;"/>
+                            <Label fx:id="lblSisaGaji" text="Rp.7.000.000" layoutX="20" layoutY="55" style="-fx-text-fill:white; -fx-font-size:26px; -fx-font-weight:bold;"/>
+                            
+                            <!-- Wallet icon circle -->
+                            <AnchorPane layoutX="250" layoutY="20" prefWidth="50" prefHeight="50" style="-fx-background-color:#8baed6; -fx-background-radius:25;">
+                                <Label text="💳" layoutX="13" layoutY="10" style="-fx-font-size:24px;"/>
+                            </AnchorPane>
+                        </AnchorPane>
+                        
+                        <!-- HISTORY BUTTON WITH INTEGRATED ICON -->
+                        <Button fx:id="btnHistory" prefWidth="420" prefHeight="180" 
+                                style="-fx-background-color:#d9d9d9; -fx-background-radius:20; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 8, 0, 0, 2); -fx-cursor:hand;">
+                            <graphic>
+                                <VBox alignment="CENTER" spacing="15">
+                                    <!-- Icon area -->
+                                    <HBox alignment="CENTER" spacing="10">
+                                        <Label text="📄" style="-fx-font-size:50px;"/>
+                                        <Label text="🕐" style="-fx-font-size:45px;"/>
+                                    </HBox>
+                                    <!-- Text -->
+                                    <Label text="History Transfer&#10;Gaji Pensiun" 
+                                           style="-fx-font-size:16px; -fx-text-alignment:center; -fx-font-weight:bold;"/>
+                                </VBox>
+                            </graphic>
+                        </Button>
+                    </VBox>
+                </AnchorPane>
+            </center>
+        </BorderPane>
+    </center>
+</BorderPane>

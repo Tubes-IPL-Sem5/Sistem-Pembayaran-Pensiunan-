@@ -10,32 +10,39 @@ import java.sql.SQLException;
 public class UserDao{
 
     public User findAccountByUsername(String username) {
-        String SQL = "SELECT id_akun, username, password, peran FROM akun_pengguna WHERE username = ?";
-        User user = null;
 
-        try (Connection conn = Koneksi.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(SQL)) {
+        String sql = """
+            SELECT ap.id_akun, ap.username, ap.password, ap.peran,
+                   p.id_pensiunan, p.nama
+            FROM akun_pengguna ap
+            LEFT JOIN akun_pensiunan p ON ap.id_akun = p.id_akun
+            WHERE ap.username = ?
+        """;
 
-            pstmt.setString(1, username);
-            try (ResultSet rs = pstmt.executeQuery()) {
-                
-                if (rs.next()) {
-                    return new User(
-                        rs.getInt("id_akun"),
-                        rs.getString("username"),
-                        rs.getString("peran") 
-                    );
-                }
+        try (Connection c = Koneksi.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+
+            ps.setString(1, username);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return new User(
+                    rs.getInt("id_akun"),
+                    rs.getString("username"),
+                    rs.getString("password"),   // hash
+                    rs.getString("peran"),
+                    rs.getInt("id_pensiunan"),
+                    rs.getString("nama"),
+                    false
+                );
             }
-        } catch (SQLException e) {
-            System.err.println("Database Error saat mencari akun: " + e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return null;
     }
-    
-    /**
-     * Method tambahan untuk mengambil hash password (digunakan oleh Service).
-     */
+
+
     public String getPasswordHash(String username) {
         String SQL = "SELECT password FROM akun_pengguna WHERE username = ?";
         
