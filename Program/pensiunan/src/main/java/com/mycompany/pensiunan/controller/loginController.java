@@ -21,23 +21,21 @@ public class LoginController {
         String username = usernameField.getText();
         String password = passwordField.getText();
 
+        // Validasi input kosong 
         if (username.isBlank() || password.isBlank()) {
-            showAlert("Peringatan", "Username dan Password tidak boleh kosong.");
+            showAlert("Peringatan", "Username dan Password tidak boleh kosong."); 
             return;
         }
 
-        // Panggil AuthService untuk validasi
+        // Proses otentikasi via Service
         User user = authService.authenticate(username, password);
 
         if (user.isAuthenticated()) {
-            System.out.println("Login BERHASIL. Role: " + user.getPeran());
-            
-            // Redirect/Navigasi sesuai role
-            navigateToDashboard(user.getPeran());
-
+            System.out.println("Login BERHASIL. Role: " + user.getPeran()); 
+            navigateToDashboard(user.getPeran()); 
         } else {
-            // Tampilkan pesan kegagalan
-            showAlert("Login Gagal", "Username atau Password salah. Silakan coba lagi.");
+            // Tampilkan alert login gagal sesuai Skenario Eksepsi SRS 
+            showAlert("Login Gagal", "Username atau Password salah. Silakan coba lagi."); 
         }
     }
 
@@ -50,16 +48,28 @@ public class LoginController {
     }
 
     private void navigateToDashboard(String role) {
-        System.out.println("Role: " + role.toUpperCase());
-        
-        
+        String fxmlPath = "";
         switch (role.toUpperCase()) {
-            case "PENSIUNAN":
-                break;
             case "HRD":
+                fxmlPath = "/com/mycompany/pensiunan/view/hrd/hrdView.fxml";
                 break;
             case "KEUANGAN":
+                // fxmlPath = "/com/mycompany/pensiunan/view/keuangan/keuanganView.fxml";
                 break;
+            case "PENSIUNAN":
+                // fxmlPath = "/com/mycompany/pensiunan/view/pensiunan/pensiunanView.fxml";
+                break;
+        }
+
+        if (!fxmlPath.isEmpty()) {
+            try {
+                javafx.stage.Stage stage = (javafx.stage.Stage) usernameField.getScene().getWindow();
+                javafx.scene.Parent root = javafx.fxml.FXMLLoader.load(getClass().getResource(fxmlPath));
+                stage.setScene(new javafx.scene.Scene(root));
+                stage.setTitle("Dashboard " + role);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }

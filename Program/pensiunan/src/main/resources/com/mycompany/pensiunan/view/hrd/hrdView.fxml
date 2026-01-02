@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane stylesheets="@hrd.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.pensiunan.controller.HrdController">
+    <left>
+        <VBox styleClass="sidebar" spacing="20" alignment="TOP_CENTER">
+            <Button styleClass="icon-button" text="👤" /> <Region VBox.vgrow="ALWAYS" />
+            <Button styleClass="icon-button" text="⚙" /> <Button styleClass="icon-button" text="◀" /> </VBox>
+    </left>
+
+    <top>
+        <HBox styleClass="header" alignment="CENTER_RIGHT" spacing="20">
+            <Label text="Home" styleClass="nav-item"/>
+            <Label text="Service" styleClass="nav-item"/>
+            <Label text="Contact" styleClass="nav-item"/>
+        </HBox>
+    </top>
+
+    <center>
+        <VBox spacing="20" style="-fx-background-color: white;">
+            <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+            
+            <HBox alignment="CENTER_LEFT">
+                <Label text="Daftar Pensiunan PT GRAHADI" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+                <Region HBox.hgrow="ALWAYS" />
+                <Button text="+ Tambah Data" onAction="#handleTambah" styleClass="btn-action"/>
+            </HBox>
+
+            <TableView fx:id="tabelPensiunan" styleClass="custom-table">
+                <columns>
+                    <TableColumn fx:id="colNip" text="NIP" prefWidth="100"/>
+                    <TableColumn fx:id="colNama" text="Nama Pensiunan" prefWidth="200"/>
+                    <TableColumn fx:id="colGolongan" text="Golongan" prefWidth="100"/>
+                    <TableColumn fx:id="colMasaKerja" text="Masa Kerja (Thn)" prefWidth="100"/>
+                    <TableColumn fx:id="colTglPensiun" text="Tgl Pensiun" prefWidth="120"/>
+                    <TableColumn fx:id="colAksi" text="Persetujuan" prefWidth="150"/>
+                </columns>
+            </TableView>
+        </VBox>
+    </center>
+</BorderPane>
