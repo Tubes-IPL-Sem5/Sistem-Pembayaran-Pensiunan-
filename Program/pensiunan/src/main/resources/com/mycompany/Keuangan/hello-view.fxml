@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<StackPane prefHeight="600.0" prefWidth="900.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.Keuangan.HelloController">
+    <HBox>
+        <VBox prefWidth="80" style="-fx-background-color: #2D7D52;" alignment="TOP_CENTER" spacing="30">
+            <padding><Insets top="20"/></padding>
+            <Label text="👤" style="-fx-font-size: 30;"/>
+            <Region VBox.vgrow="ALWAYS" />
+            <Button onAction="#backToDashboard" text="&lt;" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 30; -fx-cursor: hand;"/>
+        </VBox>
+
+        <VBox HBox.hgrow="ALWAYS">
+            <HBox alignment="CENTER_LEFT" prefHeight="60" style="-fx-background-color: #69A282; -fx-padding: 0 20;">
+                <Label text="Budi Saputra" textFill="WHITE" style="-fx-font-weight: bold;"/>
+            </HBox>
+
+            <StackPane VBox.vgrow="ALWAYS">
+                <HBox fx:id="paneMenu" alignment="CENTER" spacing="50">
+                    <VBox alignment="CENTER" onMouseClicked="#showTransferDana" style="-fx-cursor: hand;">
+                        <VBox style="-fx-background-color: #e0e0e0; -fx-padding: 30; -fx-background-radius: 20;"><Label text="💰" style="-fx-font-size: 50;"/></VBox>
+                        <Label text="Transfer Uang Pensiun" style="-fx-font-weight: bold;"/>
+                    </VBox>
+                    <VBox alignment="CENTER" onMouseClicked="#showDataGaji" style="-fx-cursor: hand;">
+                        <VBox style="-fx-background-color: #e0e0e0; -fx-padding: 30; -fx-background-radius: 20;"><Label text="📋" style="-fx-font-size: 50;"/></VBox>
+                        <Label text="Data Gaji Pensiunan" style="-fx-font-weight: bold;"/>
+                    </VBox>
+                </HBox>
+
+                <VBox fx:id="paneTransfer" visible="false" spacing="20" style="-fx-padding: 30;">
+                    <TableView fx:id="tablePensiunan" VBox.vgrow="ALWAYS" style="-fx-background-color: #8C8C8C;">
+                        <columns>
+                            <TableColumn fx:id="colNama" text="Nama" prefWidth="120"/><TableColumn fx:id="colNip" text="NIP" prefWidth="80"/>
+                            <TableColumn fx:id="colLalu" text="Nominal Terakhir" prefWidth="140"/><TableColumn fx:id="colAkan" text="Nominal Akan Ditransfer" prefWidth="140"/>
+                            <TableColumn fx:id="colStatus" text="Persetujuan" prefWidth="120"/>
+                        </columns>
+                    </TableView>
+                    <Button text="Proses Pembayaran" onAction="#handleProsesPembayaran" style="-fx-background-color: #2D7D52; -fx-text-fill: white; -fx-font-weight: bold;"/>
+                </VBox>
+
+                <VBox fx:id="paneDataGaji" visible="false" spacing="20" style="-fx-padding: 30;">
+                    <TableView fx:id="tableDataGaji" VBox.vgrow="ALWAYS" style="-fx-background-color: #8C8C8C;">
+                        <columns>
+                            <TableColumn fx:id="colGajiNama" text="Nama" prefWidth="150"/><TableColumn fx:id="colGajiNip" text="NIP" prefWidth="100"/>
+                            <TableColumn fx:id="colGajiTgl" text="Tanggal Pensiunan" prefWidth="150"/><TableColumn fx:id="colGajiLalu" text="Nominal Terakhir" prefWidth="150"/>
+                            <TableColumn fx:id="colGajiGol" text="Golongan" prefWidth="100"/>
+                        </columns>
+                    </TableView>
+                </VBox>
+            </StackPane>
+        </VBox>
+    </HBox>
+</StackPane>
