@@ -6,34 +6,34 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder; // WAJI
 
 public class AuthService {
     
-    private final UserDao userDAO = new UserDao();
-    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(); // BCrypt Encoder
+private final UserDao userDAO = new UserDao();
+private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    /**
-     * Memvalidasi kredensial pengguna dan mengembalikan objek User jika berhasil.
-     * @param username Username input.
-     * @param rawPassword Password plain text input.
-     * @return User object yang terotentikasi, atau User object gagal.
-     */
     public User authenticate(String username, String rawPassword) {
-        
-        
-        String storedHash = userDAO.getPasswordHash(username);
 
-        if (storedHash != null) {
-            if (passwordEncoder.matches(rawPassword, storedHash)) {
-                return userDAO.findAccountByUsername(username); 
-                
-            }
+        // ambil data akun + relasi role
+        User user = userDAO.findAccountByUsername(username);
+
+        // username tidak ditemukan
+        if (user == null) {
+            return new User(false);
         }
-        
-        return new User();
+
+        // verifikasi password
+        if (!passwordEncoder.matches(rawPassword, user.getPasswordHash())) {
+            return new User(false);
+        }
+
+        // autentikasi valid
+        user.setAuthenticated(true);
+        return user;
     }
-    
-    /**
-     * Method untuk mendapatkan hash password (digunakan untuk Registrasi/Update)
-     */
+
     public String hashPassword(String rawPassword) {
         return passwordEncoder.encode(rawPassword);
     }
+
+    
+    
+    
 }

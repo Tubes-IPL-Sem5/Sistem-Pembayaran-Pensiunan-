@@ -1,4 +1,5 @@
-package com.mycompany.Keuangan;
+package com.mycompany.pensiunan.controller;
+import com.mycompany.pensiunan.model.Keuangan;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -6,7 +7,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import java.util.Optional;
 
-public class HelloController {
+public class KeuanganController {
     @FXML private HBox paneMenu;
     @FXML private VBox paneTransfer, paneDataGaji;
     @FXML private TableView<Keuangan> tablePensiunan, tableDataGaji;

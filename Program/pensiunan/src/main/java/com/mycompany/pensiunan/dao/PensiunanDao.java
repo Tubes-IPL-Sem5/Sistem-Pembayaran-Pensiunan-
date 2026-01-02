@@ -31,4 +31,35 @@ public class PensiunanDao {
         }
         return list;
     }
+    
+    public Pensiunan getByIdAkun(int idAkun) {
+    String sql = """
+        SELECT *
+        FROM akun_pensiunan
+        WHERE id_akun = ?
+    """;
+
+    try (Connection c = Koneksi.getConnection();
+         PreparedStatement ps = c.prepareStatement(sql)) {
+
+        ps.setInt(1, idAkun);
+        ResultSet rs = ps.executeQuery();
+
+        if (rs.next()) {
+            return new Pensiunan(
+                rs.getInt("id_pensiunan"),
+                rs.getString("nip"),
+                rs.getString("nama"),
+                rs.getString("golongan"),
+                rs.getInt("masa_kerja"),
+                rs.getDate("tanggal_pensiun").toLocalDate()
+            );
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return null;
+}
+
+    
 }

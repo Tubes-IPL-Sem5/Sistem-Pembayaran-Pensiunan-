@@ -8,6 +8,8 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import com.mycompany.pensiunan.util.Session;
+
 
 public class LoginController {
 
@@ -31,7 +33,18 @@ public class LoginController {
         User user = authService.authenticate(username, password);
 
         if (user.isAuthenticated()) {
-            System.out.println("Login BERHASIL. Role: " + user.getPeran()); 
+            System.out.println("Login BERHASIL. ");
+            System.out.println("Nama: " +user.getNama());
+            System.out.println("Id: "+user.getIdAkun());
+            System.out.println("Role: " + user.getPeran()); 
+            Session.setSession(
+                user.getIdAkun(),
+                user.getUsername(),
+                user.getPeran(),
+                user.getIdPensiunan(),
+                user.getNama()
+            );
+
             navigateToDashboard(user.getPeran()); 
         } else {
             // Tampilkan alert login gagal sesuai Skenario Eksepsi SRS 
@@ -54,10 +67,10 @@ public class LoginController {
                 fxmlPath = "/com/mycompany/pensiunan/view/hrd/hrdView.fxml";
                 break;
             case "KEUANGAN":
-                // fxmlPath = "/com/mycompany/pensiunan/view/keuangan/keuanganView.fxml";
+                 fxmlPath = "/com/mycompany/pensiunan/view/keuangan/keuanganView.fxml";
                 break;
             case "PENSIUNAN":
-                // fxmlPath = "/com/mycompany/pensiunan/view/pensiunan/pensiunanView.fxml";
+                 fxmlPath = "/com/mycompany/pensiunan/view/pensiunan/pensiunanView.fxml";
                 break;
         }
 
