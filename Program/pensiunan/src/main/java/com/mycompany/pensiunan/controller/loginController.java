@@ -1,54 +1,57 @@
 package com.mycompany.pensiunan.controller;
 
-import com.mycompany.pensiunan.service.AuthService; // Tambahkan import Service
-import com.mycompany.pensiunan.model.User; 
-
+import com.mycompany.pensiunan.service.AuthService;
+import com.mycompany.pensiunan.model.User;
+import com.mycompany.pensiunan.util.Session;
 import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import com.mycompany.pensiunan.util.Session;
-
 
 public class LoginController {
 
     @FXML private TextField usernameField;
     @FXML private PasswordField passwordField;
 
-    private final AuthService authService = new AuthService(); // Inisialisasi Service
+    private final AuthService authService = new AuthService();
 
     @FXML
     public void handleLogin() {
         String username = usernameField.getText();
         String password = passwordField.getText();
 
-        // Validasi input kosong 
         if (username.isBlank() || password.isBlank()) {
-            showAlert("Peringatan", "Username dan Password tidak boleh kosong."); 
+            showAlert("Peringatan", "Username dan Password tidak boleh kosong.");
             return;
         }
 
-        // Proses otentikasi via Service
         User user = authService.authenticate(username, password);
 
         if (user.isAuthenticated()) {
             System.out.println("Login BERHASIL. ");
-            System.out.println("Nama: " +user.getNama());
-            System.out.println("Id: "+user.getIdAkun());
-            System.out.println("Role: " + user.getPeran()); 
+
+            // --- LOGIKA TAMBAHAN ---
+            String namaTampilan = user.getNama();
+            // Jika nama null (kosong), gunakan username sebagai cadangan
+            if (namaTampilan == null || namaTampilan.trim().isEmpty()) {
+                namaTampilan = user.getUsername();
+            }
+
+            System.out.println("Nama: " + namaTampilan);
+            System.out.println("Role: " + user.getPeran());
+
             Session.setSession(
-                user.getIdAkun(),
-                user.getUsername(),
-                user.getPeran(),
-                user.getIdPensiunan(),
-                user.getNama()
+                    user.getIdAkun(),
+                    user.getUsername(),
+                    user.getPeran(),
+                    user.getIdPensiunan(),
+                    namaTampilan // Masukkan nama yang sudah divalidasi
             );
 
-            navigateToDashboard(user.getPeran()); 
+            navigateToDashboard(user.getPeran());
         } else {
-            // Tampilkan alert login gagal sesuai Skenario Eksepsi SRS 
-            showAlert("Login Gagal", "Username atau Password salah. Silakan coba lagi."); 
+            showAlert("Login Gagal", "Username atau Password salah. Silakan coba lagi.");
         }
     }
 
@@ -67,10 +70,10 @@ public class LoginController {
                 fxmlPath = "/com/mycompany/pensiunan/view/hrd/hrdView.fxml";
                 break;
             case "KEUANGAN":
-                 fxmlPath = "/com/mycompany/pensiunan/view/keuangan/keuanganView.fxml";
+                fxmlPath = "/com/mycompany/pensiunan/view/keuangan/keuanganView.fxml";
                 break;
             case "PENSIUNAN":
-                 fxmlPath = "/com/mycompany/pensiunan/view/pensiunan/pensiunanView.fxml";
+                fxmlPath = "/com/mycompany/pensiunan/view/pensiunan/pensiunanView.fxml";
                 break;
         }
 
