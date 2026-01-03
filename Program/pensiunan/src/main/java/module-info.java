@@ -7,6 +7,8 @@ module com.mycompany.pensiunan {
     // Module tambahan (sesuai kode user sebelumnya)
     requires java.base;
     requires spring.security.crypto;
+    requires java.desktop;
+    requires java.logging;
 
     // EXPORTS: Agar package ini bisa dilihat oleh module lain
     exports com.mycompany.pensiunan;
