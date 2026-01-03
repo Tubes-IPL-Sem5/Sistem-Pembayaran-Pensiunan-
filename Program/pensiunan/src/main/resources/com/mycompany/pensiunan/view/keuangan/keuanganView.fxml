@@ -1,54 +1,101 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.geometry.Insets?>
 
-<StackPane prefHeight="600.0" prefWidth="900.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.pensiunan.controller.KeuanganController">
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<StackPane prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.pensiunan.controller.KeuanganController">
+
     <HBox>
-        <VBox prefWidth="80" style="-fx-background-color: #2D7D52;" alignment="TOP_CENTER" spacing="30">
-            <padding><Insets top="20"/></padding>
-            <Label text="👤" style="-fx-font-size: 30;"/>
+        <VBox alignment="TOP_CENTER" prefWidth="80" spacing="30" style="-fx-background-color: #2D7D52;">
+            <padding>
+                <Insets top="20" />
+            </padding>
+
+            <Label style="-fx-font-size: 30; -fx-text-fill: white;" text="👤" />
+
             <Region VBox.vgrow="ALWAYS" />
-            <Button onAction="#backToDashboard" text="&lt;" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 30; -fx-cursor: hand;"/>
+
+            <Button onAction="#backToDashboard" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 30; -fx-cursor: hand;" text="&lt;" />
+
+            <padding>
+                <Insets bottom="20" />
+            </padding>
         </VBox>
 
-        <VBox HBox.hgrow="ALWAYS">
+        <VBox style="-fx-background-color: #f4f4f4;" HBox.hgrow="ALWAYS">
+
             <HBox alignment="CENTER_LEFT" prefHeight="60" style="-fx-background-color: #69A282; -fx-padding: 0 20;">
-                <Label text="Budi Saputra" textFill="WHITE" style="-fx-font-weight: bold;"/>
+                <Label fx:id="lblNamaUser" text="Loading User..." textFill="WHITE">
+                    <font>
+                        <Font name="System Bold" size="20.0" />
+                    </font>
+                </Label>
             </HBox>
 
             <StackPane VBox.vgrow="ALWAYS">
+
                 <HBox fx:id="paneMenu" alignment="CENTER" spacing="50">
                     <VBox alignment="CENTER" onMouseClicked="#showTransferDana" style="-fx-cursor: hand;">
-                        <VBox style="-fx-background-color: #e0e0e0; -fx-padding: 30; -fx-background-radius: 20;"><Label text="💰" style="-fx-font-size: 50;"/></VBox>
-                        <Label text="Transfer Uang Pensiun" style="-fx-font-weight: bold;"/>
+                        <VBox style="-fx-background-color: #e0e0e0; -fx-padding: 30; -fx-background-radius: 20; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 5);">
+                            <Label style="-fx-font-size: 50;" text="💰" />
+                        </VBox>
+                        <Label style="-fx-font-weight: bold; -fx-font-size: 14; -fx-padding: 10 0 0 0;" text="Transfer Uang Pensiun" />
                     </VBox>
+
                     <VBox alignment="CENTER" onMouseClicked="#showDataGaji" style="-fx-cursor: hand;">
-                        <VBox style="-fx-background-color: #e0e0e0; -fx-padding: 30; -fx-background-radius: 20;"><Label text="📋" style="-fx-font-size: 50;"/></VBox>
-                        <Label text="Data Gaji Pensiunan" style="-fx-font-weight: bold;"/>
+                        <VBox style="-fx-background-color: #e0e0e0; -fx-padding: 30; -fx-background-radius: 20; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 5);">
+                            <Label style="-fx-font-size: 50;" text="📋" />
+                        </VBox>
+                        <Label style="-fx-font-weight: bold; -fx-font-size: 14; -fx-padding: 10 0 0 0;" text="Data Gaji Pensiunan" />
                     </VBox>
                 </HBox>
 
-                <VBox fx:id="paneTransfer" visible="false" spacing="20" style="-fx-padding: 30;">
-                    <TableView fx:id="tablePensiunan" VBox.vgrow="ALWAYS" style="-fx-background-color: #8C8C8C;">
+                <VBox fx:id="paneTransfer" spacing="20" style="-fx-padding: 30;" visible="false">
+                    <Label style="-fx-font-size: 18; -fx-font-weight: bold;" text="Daftar Pengajuan Transfer" />
+
+                    <TableView fx:id="tablePensiunan" style="-fx-base: #e0e0e0;" VBox.vgrow="ALWAYS">
                         <columns>
-                            <TableColumn fx:id="colNama" text="Nama" prefWidth="120"/><TableColumn fx:id="colNip" text="NIP" prefWidth="80"/>
-                            <TableColumn fx:id="colLalu" text="Nominal Terakhir" prefWidth="140"/><TableColumn fx:id="colAkan" text="Nominal Akan Ditransfer" prefWidth="140"/>
-                            <TableColumn fx:id="colStatus" text="Persetujuan" prefWidth="120"/>
+                            <TableColumn fx:id="colNama" prefWidth="150" text="Nama" />
+                            <TableColumn fx:id="colNip" prefWidth="100" text="NIP" />
+                            <TableColumn fx:id="colLalu" prefWidth="150" text="Nominal Terakhir" />
+                            <TableColumn fx:id="colAkan" prefWidth="160" text="Nominal Akan Ditransfer" />
+                            <TableColumn fx:id="colStatus" prefWidth="120" text="Persetujuan" />
                         </columns>
+                        <columnResizePolicy>
+                            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                        </columnResizePolicy>
                     </TableView>
-                    <Button text="Proses Pembayaran" onAction="#handleProsesPembayaran" style="-fx-background-color: #2D7D52; -fx-text-fill: white; -fx-font-weight: bold;"/>
+
+                    <HBox alignment="CENTER_RIGHT">
+                        <Button onAction="#handleProsesPembayaran" style="-fx-background-color: #2D7D52; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14; -fx-padding: 10 20; -fx-cursor: hand;" text="Proses Pembayaran" />
+                    </HBox>
                 </VBox>
 
-                <VBox fx:id="paneDataGaji" visible="false" spacing="20" style="-fx-padding: 30;">
-                    <TableView fx:id="tableDataGaji" VBox.vgrow="ALWAYS" style="-fx-background-color: #8C8C8C;">
+                <VBox fx:id="paneDataGaji" spacing="20" style="-fx-padding: 30;" visible="false">
+                    <Label style="-fx-font-size: 18; -fx-font-weight: bold;" text="Riwayat Data Gaji" />
+
+                    <TableView fx:id="tableDataGaji" style="-fx-base: #e0e0e0;" VBox.vgrow="ALWAYS">
                         <columns>
-                            <TableColumn fx:id="colGajiNama" text="Nama" prefWidth="150"/><TableColumn fx:id="colGajiNip" text="NIP" prefWidth="100"/>
-                            <TableColumn fx:id="colGajiTgl" text="Tanggal Pensiunan" prefWidth="150"/><TableColumn fx:id="colGajiLalu" text="Nominal Terakhir" prefWidth="150"/>
-                            <TableColumn fx:id="colGajiGol" text="Golongan" prefWidth="100"/>
+                            <TableColumn fx:id="colGajiNama" prefWidth="150" text="Nama" />
+                            <TableColumn fx:id="colGajiNip" prefWidth="100" text="NIP" />
+                            <TableColumn fx:id="colGajiTgl" prefWidth="150" text="Tanggal Pensiunan" />
+                            <TableColumn fx:id="colGajiLalu" prefWidth="150" text="Nominal Terakhir" />
+                            <TableColumn fx:id="colGajiGol" prefWidth="80" text="Golongan" />
                         </columns>
+                        <columnResizePolicy>
+                            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                        </columnResizePolicy>
                     </TableView>
                 </VBox>
+
             </StackPane>
         </VBox>
     </HBox>
