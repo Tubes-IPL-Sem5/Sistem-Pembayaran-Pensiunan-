@@ -6,10 +6,11 @@
 <BorderPane stylesheets="@hrd.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.pensiunan.controller.HrdController">
     <left>
         <VBox styleClass="sidebar" spacing="20" alignment="TOP_CENTER">
-            <Button styleClass="icon-button" text="👤" /> 
+            <Button fx:id="btnProfil" styleClass="icon-button" text="👤" onAction="#handleLogout" /> 
+        
             <Region VBox.vgrow="ALWAYS" />
             <Button styleClass="icon-button" text="⚙" /> 
-            <Button styleClass="icon-button" text="◀" /> 
+            <Button styleClass="icon-button" text="◀" onAction="#handleLogout" /> 
         </VBox>
     </left>
 

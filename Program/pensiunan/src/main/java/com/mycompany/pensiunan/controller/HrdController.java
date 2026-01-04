@@ -131,4 +131,26 @@ public class HrdController {
         alert.showAndWait();
     }
     
+    @FXML
+    private void handleLogout() {
+        try {
+            Alert alert = new Alert(AlertType.CONFIRMATION);
+            alert.setTitle("Konfirmasi Logout");
+            alert.setHeaderText(null);
+            alert.setContentText("Apakah Anda yakin ingin keluar dari sistem?");
+
+            if (alert.showAndWait().get() == ButtonType.OK) {
+                javafx.stage.Stage stage = (javafx.stage.Stage) tabelPensiunan.getScene().getWindow();
+                javafx.scene.Parent root = javafx.fxml.FXMLLoader.load(getClass().getResource("/com/mycompany/pensiunan/view/login/loginView.fxml"));
+
+                stage.setScene(new javafx.scene.Scene(root));
+                stage.setTitle("Login - Sistem Informasi Pensiunan");
+                stage.centerOnScreen(); 
+            }
+        } catch (Exception e) {
+            showAlert(AlertType.ERROR, "Error Logout", "Gagal kembali ke halaman login: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+    
 }
