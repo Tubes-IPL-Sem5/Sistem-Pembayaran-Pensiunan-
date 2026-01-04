@@ -6,8 +6,11 @@
 <BorderPane stylesheets="@hrd.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.pensiunan.controller.HrdController">
     <left>
         <VBox styleClass="sidebar" spacing="20" alignment="TOP_CENTER">
-            <Button styleClass="icon-button" text="👤" /> <Region VBox.vgrow="ALWAYS" />
-            <Button styleClass="icon-button" text="⚙" /> <Button styleClass="icon-button" text="◀" /> </VBox>
+            <Button styleClass="icon-button" text="👤" /> 
+            <Region VBox.vgrow="ALWAYS" />
+            <Button styleClass="icon-button" text="⚙" /> 
+            <Button styleClass="icon-button" text="◀" /> 
+        </VBox>
     </left>
 
     <top>
@@ -19,25 +22,64 @@
     </top>
 
     <center>
-        <VBox spacing="20" style="-fx-background-color: white;">
-            <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
-            
-            <HBox alignment="CENTER_LEFT">
-                <Label text="Daftar Pensiunan PT GRAHADI" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
-                <Region HBox.hgrow="ALWAYS" />
-                <Button text="+ Tambah Data" onAction="#handleTambah" styleClass="btn-action"/>
-            </HBox>
+    <VBox spacing="20" style="-fx-background-color: white;">
+        <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+        
+        <HBox alignment="CENTER_LEFT">
+            <Label text="Daftar Pensiunan PT GRAHADI" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+            <Region HBox.hgrow="ALWAYS" />
+            <Button text="+ Tambah Data" onAction="#tampilkanForm" styleClass="btn-action"/>
+        </HBox>
 
-            <TableView fx:id="tabelPensiunan" styleClass="custom-table">
-                <columns>
-                    <TableColumn fx:id="colNip" text="NIP" prefWidth="100"/>
-                    <TableColumn fx:id="colNama" text="Nama Pensiunan" prefWidth="200"/>
-                    <TableColumn fx:id="colGolongan" text="Golongan" prefWidth="100"/>
-                    <TableColumn fx:id="colMasaKerja" text="Masa Kerja (Thn)" prefWidth="100"/>
-                    <TableColumn fx:id="colTglPensiun" text="Tgl Pensiun" prefWidth="120"/>
-                    <TableColumn fx:id="colAksi" text="Persetujuan" prefWidth="150"/>
-                </columns>
-            </TableView>
-        </VBox>
-    </center>
+        <GridPane fx:id="formInputPensiunan" 
+                  visible="false" managed="false"
+                  hgap="10" vgap="10" 
+                  style="-fx-background-color: #f4f4f4; -fx-padding: 15; -fx-background-radius: 10;">
+            <columnConstraints>
+                <ColumnConstraints minWidth="100" prefWidth="100" />
+                <ColumnConstraints minWidth="200" prefWidth="250" />
+                <ColumnConstraints minWidth="100" prefWidth="100" />
+                <ColumnConstraints minWidth="200" prefWidth="250" />
+            </columnConstraints>
+            
+            <children>
+                <Label text="NIP:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                <TextField fx:id="txtNip" promptText="Masukkan NIP" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                
+                <Label text="Nama:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                <TextField fx:id="txtNama" promptText="Nama Lengkap" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                
+                <Label text="Golongan:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                <TextField fx:id="txtGolongan" promptText="Contoh: IV/A" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                
+                <Label text="Masa Kerja:" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+                <TextField fx:id="txtMasaKerja" promptText="Tahun" GridPane.columnIndex="3" GridPane.rowIndex="0"/>
+                
+                <Label text="Tgl Pensiun:" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
+                <DatePicker fx:id="dpTanggalPensiun" GridPane.columnIndex="3" GridPane.rowIndex="1"/>
+                
+                <Label text="Username:" GridPane.columnIndex="2" GridPane.rowIndex="2"/>
+                <TextField fx:id="txtUsername" promptText="Username Login" GridPane.columnIndex="3" GridPane.rowIndex="2"/>
+                
+                <Label text="Password:" GridPane.columnIndex="2" GridPane.rowIndex="3"/>
+                <PasswordField fx:id="txtPassword" promptText="Password Login" GridPane.columnIndex="3" GridPane.rowIndex="3"/>
+
+                <HBox spacing="10" alignment="CENTER_RIGHT" GridPane.columnIndex="3" GridPane.rowIndex="4">
+                    <Button text="Batal" onAction="#sembunyikanForm" style="-fx-background-color: #ff4444; -fx-text-fill: white; -fx-background-radius: 10;"/>
+                    <Button text="Simpan Ke Database" onAction="#handleTambah" styleClass="btn-action"/>
+                </HBox>
+            </children>
+        </GridPane>
+
+        <TableView fx:id="tabelPensiunan" styleClass="custom-table" VBox.vgrow="ALWAYS">
+    <columns>
+        <TableColumn fx:id="colNip" text="NIP" prefWidth="100"/>
+        <TableColumn fx:id="colNama" text="Nama Pensiunan" prefWidth="180"/>
+        <TableColumn fx:id="colGolongan" text="Gol" prefWidth="60"/>
+        <TableColumn fx:id="colMasaKerja" text="Masa Kerja" prefWidth="100"/>
+        <TableColumn fx:id="colTglPensiun" text="Tgl Pensiun" prefWidth="120"/>
+    </columns>
+</TableView>
+    </VBox>
+</center>
 </BorderPane>
