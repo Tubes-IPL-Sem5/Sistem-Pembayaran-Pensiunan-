@@ -14,9 +14,9 @@
 <StackPane prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.pensiunan.controller.KeuanganController">
 
     <HBox>
-        <VBox alignment="TOP_CENTER" prefWidth="80" spacing="30" style="-fx-background-color: #2D7D52;">
+        <VBox alignment="TOP_CENTER" prefWidth="80" spacing="20" style="-fx-background-color: #2D7D52;">
             <padding>
-                <Insets top="20" />
+                <Insets top="20" bottom="20"/>
             </padding>
 
             <Label style="-fx-font-size: 30; -fx-text-fill: white;" text="👤" />
@@ -25,9 +25,8 @@
 
             <Button onAction="#backToDashboard" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 30; -fx-cursor: hand;" text="&lt;" />
 
-            <padding>
-                <Insets bottom="20" />
-            </padding>
+            <Button onAction="#handleLogout" text="Logout" style="-fx-background-color: #c62828; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;" />
+
         </VBox>
 
         <VBox style="-fx-background-color: #f4f4f4;" HBox.hgrow="ALWAYS">
