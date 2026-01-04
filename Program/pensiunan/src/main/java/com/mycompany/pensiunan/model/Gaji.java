@@ -1,15 +1,27 @@
 package com.mycompany.pensiunan.model;
 
 public class Gaji {
-    private String tanggal, keterangan;
-    private double jumlah;
+    private final String nama;
+    private final String nip;
+    private final String tanggal;
+    private final double jumlah;
+    private final String golongan;
+    private final String status;
 
-    public Gaji(String tgl, String ket, double jml) {
-        this.tanggal = tgl;
-        this.keterangan = ket;
-        this.jumlah = jml;
+    public Gaji(String nama, String nip, String tanggal,
+                double jumlah, String golongan, String status) {
+        this.nama = nama;
+        this.nip = nip;
+        this.tanggal = tanggal;
+        this.jumlah = jumlah;
+        this.golongan = golongan;
+        this.status = status;
     }
+
+    public String getNama() { return nama; }
+    public String getNip() { return nip; }
     public String getTanggal() { return tanggal; }
-    public String getKeterangan() { return keterangan; }
     public double getJumlah() { return jumlah; }
+    public String getGolongan() { return golongan; }
+    public String getStatus() { return status; }
 }

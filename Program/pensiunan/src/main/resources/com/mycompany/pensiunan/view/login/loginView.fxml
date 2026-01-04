@@ -1,39 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.geometry.*?>
 
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.mycompany.pensiunan.controller.LoginController"
             stylesheets="@login.css">
-
     <center>
         <VBox fx:id="contentBox"
               alignment="CENTER"
-              spacing="24"
-              maxWidth="420"
+              spacing="20"
+              maxWidth="400"
               styleClass="content-wrapper">
-
-            <Text text="LOGIN SISTEM" styleClass="title-text"/>
-            <Text text="Pembayaran Pensiunan PT GRAHADI" styleClass="subtitle-text"/>
-
+            
+            <!-- Icon Circle -->
+            <StackPane>
+                <Circle radius="50" styleClass="icon-circle"/>
+                <Circle radius="30" styleClass="icon-inner"/>
+            </StackPane>
+            
+            <!-- Title -->
+            <Text text="Login" styleClass="title-text"/>
+            
+            <!-- Login Card -->
             <VBox spacing="16" styleClass="login-card">
-                <TextField fx:id="usernameField"
-                           promptText="Username"
-                           styleClass="input-field"/>
-
-                <PasswordField fx:id="passwordField"
-                               promptText="Password"
+                <VBox spacing="8">
+                    <Label text="Username" styleClass="field-label"/>
+                    <TextField fx:id="usernameField"
                                styleClass="input-field"/>
+                </VBox>
+                
+                <VBox spacing="8">
+                    <Label text="Password" styleClass="field-label"/>
+                    <PasswordField fx:id="passwordField"
+                                   styleClass="input-field"/>
+                </VBox>
+                
+                <HBox alignment="CENTER_RIGHT">
+                    <Hyperlink text="Lupa Password?"
+                               onAction="#handleForgotPassword"
+                               styleClass="forgot-password-link"/>
 
-                <Button text="LOGIN"
+                </HBox>
+                
+                <Button text="Login"
                         onAction="#handleLogin"
                         styleClass="login-button"/>
             </VBox>
-
         </VBox>
     </center>
-
 </BorderPane>

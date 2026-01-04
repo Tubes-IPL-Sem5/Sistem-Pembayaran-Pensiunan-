@@ -3,84 +3,287 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 
-<BorderPane stylesheets="@hrd.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.pensiunan.controller.HrdController">
+<BorderPane stylesheets="@hrd.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" 
+            fx:controller="com.mycompany.pensiunan.controller.HrdController"
+            prefWidth="1400" prefHeight="800">
+    
+    <!-- SIDEBAR -->
     <left>
-        <VBox styleClass="sidebar" spacing="20" alignment="TOP_CENTER">
-            <Button fx:id="btnProfil" styleClass="icon-button" text="👤" onAction="#handleLogout" /> 
-        
-            <Region VBox.vgrow="ALWAYS" />
-            <Button styleClass="icon-button" text="⚙" /> 
-            <Button styleClass="icon-button" text="◀" onAction="#handleLogout" /> 
+        <VBox styleClass="sidebar" spacing="20">
+            <padding>
+                <Insets top="30" right="15" bottom="30" left="15"/>
+            </padding>
+            
+            <Region VBox.vgrow="ALWAYS"/>
+            <Button fx:id="btnLogout" styleClass="sidebar-btn-logout" text="⎋" onAction="#handleLogout"/>
         </VBox>
     </left>
 
+    <!-- HEADER -->
     <top>
-        <HBox styleClass="header" alignment="CENTER_RIGHT" spacing="20">
-            <Label text="Home" styleClass="nav-item"/>
-            <Label text="Service" styleClass="nav-item"/>
-            <Label text="Contact" styleClass="nav-item"/>
+        <HBox styleClass="header" alignment="CENTER_LEFT" spacing="20">
+            <padding>
+                <Insets top="20" right="40" bottom="20" left="40"/>
+            </padding>
+            
+            <VBox>
+                <Label text="Manajemen Data Pensiunan" styleClass="header-title"/>
+                <Label text="PT GRAHADI" styleClass="header-subtitle"/>
+            </VBox>
+            
+            <Region HBox.hgrow="ALWAYS"/>
+           
         </HBox>
     </top>
 
+    <!-- MAIN CONTENT -->
     <center>
-    <VBox spacing="20" style="-fx-background-color: white;">
-        <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
-        
-        <HBox alignment="CENTER_LEFT">
-            <Label text="Daftar Pensiunan PT GRAHADI" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
-            <Region HBox.hgrow="ALWAYS" />
-            <Button text="+ Tambah Data" onAction="#tampilkanForm" styleClass="btn-action"/>
-        </HBox>
-
-        <GridPane fx:id="formInputPensiunan" 
-                  visible="false" managed="false"
-                  hgap="10" vgap="10" 
-                  style="-fx-background-color: #f4f4f4; -fx-padding: 15; -fx-background-radius: 10;">
-            <columnConstraints>
-                <ColumnConstraints minWidth="100" prefWidth="100" />
-                <ColumnConstraints minWidth="200" prefWidth="250" />
-                <ColumnConstraints minWidth="100" prefWidth="100" />
-                <ColumnConstraints minWidth="200" prefWidth="250" />
-            </columnConstraints>
+        <VBox spacing="25" styleClass="main-content">
+            <padding>
+                <Insets top="30" right="40" bottom="30" left="40"/>
+            </padding>
             
-            <children>
-                <Label text="NIP:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
-                <TextField fx:id="txtNip" promptText="Masukkan NIP" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+            <!-- TITLE BAR WITH SEARCH -->
+            <HBox alignment="CENTER_LEFT" spacing="20">
+                <Label text="Daftar Pensiunan" styleClass="page-title"/>
+                <Region HBox.hgrow="ALWAYS"/>
                 
-                <Label text="Nama:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-                <TextField fx:id="txtNama" promptText="Nama Lengkap" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
-                
-                <Label text="Golongan:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-                <TextField fx:id="txtGolongan" promptText="Contoh: IV/A" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
-                
-                <Label text="Masa Kerja:" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
-                <TextField fx:id="txtMasaKerja" promptText="Tahun" GridPane.columnIndex="3" GridPane.rowIndex="0"/>
-                
-                <Label text="Tgl Pensiun:" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
-                <DatePicker fx:id="dpTanggalPensiun" GridPane.columnIndex="3" GridPane.rowIndex="1"/>
-                
-                <Label text="Username:" GridPane.columnIndex="2" GridPane.rowIndex="2"/>
-                <TextField fx:id="txtUsername" promptText="Username Login" GridPane.columnIndex="3" GridPane.rowIndex="2"/>
-                
-                <Label text="Password:" GridPane.columnIndex="2" GridPane.rowIndex="3"/>
-                <PasswordField fx:id="txtPassword" promptText="Password Login" GridPane.columnIndex="3" GridPane.rowIndex="3"/>
-
-                <HBox spacing="10" alignment="CENTER_RIGHT" GridPane.columnIndex="3" GridPane.rowIndex="4">
-                    <Button text="Batal" onAction="#sembunyikanForm" style="-fx-background-color: #ff4444; -fx-text-fill: white; -fx-background-radius: 10;"/>
-                    <Button text="Simpan Ke Database" onAction="#handleTambah" styleClass="btn-action"/>
+                <!-- SEARCH BOX -->
+                <HBox spacing="10" styleClass="search-container" alignment="CENTER_LEFT">
+                    <Label text="🔍" styleClass="search-icon"/>
+                    <TextField fx:id="txtSearch" promptText="Cari nama, NIP, atau golongan..." styleClass="search-field" prefWidth="300"/>
                 </HBox>
-            </children>
-        </GridPane>
+                
+                <Button text="+ Tambah Data" onAction="#tampilkanForm" styleClass="btn-add"/>
+            </HBox>
 
-        <TableView fx:id="tabelPensiunan" styleClass="custom-table" VBox.vgrow="ALWAYS">
-    <columns>
-        <TableColumn fx:id="colNip" text="NIP" prefWidth="100"/>
-        <TableColumn fx:id="colNama" text="Nama Pensiunan" prefWidth="180"/>
-        <TableColumn fx:id="colGolongan" text="Gol" prefWidth="60"/>
-        <TableColumn fx:id="colMasaKerja" text="Masa Kerja" prefWidth="100"/>
-        <TableColumn fx:id="colTglPensiun" text="Tgl Pensiun" prefWidth="120"/>
-    </columns>
-</TableView>
-    </VBox>
-</center>
+            <!-- FORM INPUT (Hidden by default) -->
+            <VBox fx:id="formInputPensiunan" 
+                  visible="false" managed="false"
+                  styleClass="form-container" spacing="20">
+                <padding>
+                    <Insets top="25" right="30" bottom="25" left="30"/>
+                </padding>
+                
+                <Label text="Form Input Data Pensiunan" styleClass="form-title"/>
+                
+                <GridPane hgap="20" vgap="15">
+                    <columnConstraints>
+                        <ColumnConstraints minWidth="120" prefWidth="120"/>
+                        <ColumnConstraints minWidth="250" prefWidth="300"/>
+                        <ColumnConstraints minWidth="120" prefWidth="120"/>
+                        <ColumnConstraints minWidth="250" prefWidth="300"/>
+                    </columnConstraints>
+                    
+                    <children>
+                        <Label text="NIP:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                        <TextField fx:id="txtNip" promptText="Masukkan NIP" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                        
+                        <Label text="Nama Lengkap:" styleClass="form-label" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+                        <TextField fx:id="txtNama" promptText="Nama Lengkap" styleClass="form-field" GridPane.columnIndex="3" GridPane.rowIndex="0"/>
+                        
+                        <Label text="Golongan:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                        <TextField fx:id="txtGolongan" promptText="Contoh: 3 (max 4)" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                        
+                        <Label text="Tanggal Pensiun:" styleClass="form-label" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
+                        <DatePicker fx:id="dpTanggalPensiun" styleClass="form-field" GridPane.columnIndex="3" GridPane.rowIndex="1"/>
+                        
+                        <Label text="Masa Kerja (Tahun):" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                        <TextField fx:id="txtMasaKerja" promptText="Contoh: 30" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                        
+                        <Label text="Username:" styleClass="form-label" GridPane.columnIndex="2" GridPane.rowIndex="2"/>
+                        <TextField fx:id="txtUsername" promptText="Username Login" styleClass="form-field" GridPane.columnIndex="3" GridPane.rowIndex="2"/>
+                        
+                        <Label text="Password:" styleClass="form-label" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                        <PasswordField fx:id="txtPassword" promptText="Password Login" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+
+                        <HBox spacing="15" alignment="CENTER_RIGHT" GridPane.columnIndex="3" GridPane.rowIndex="4">
+                            <Button text="Batal" onAction="#sembunyikanForm" styleClass="btn-cancel"/>
+                            <Button text="Simpan" onAction="#handleTambah" styleClass="btn-save"/>
+                        </HBox>
+                    </children>
+                </GridPane>
+            </VBox>
+
+            <!-- STATISTICS CARDS & FILTER -->
+            <HBox spacing="20" alignment="CENTER_LEFT">
+                <VBox styleClass="stat-card-blue" prefWidth="230">
+                    <padding>
+                        <Insets top="20" right="20" bottom="20" left="20"/>
+                    </padding>
+                    <Label text="Total Pensiunan" styleClass="stat-label"/>
+                    <Label fx:id="lblTotalPensiunan" text="247" styleClass="stat-number"/>
+                    <Label text="Terdaftar" styleClass="stat-detail"/>
+                </VBox>
+                
+                <VBox styleClass="stat-card-green" prefWidth="230">
+                    <padding>
+                        <Insets top="20" right="20" bottom="20" left="20"/>
+                    </padding>
+                    <Label text="Pensiun Tahun Ini" styleClass="stat-label"/>
+                    <Label fx:id="lblPensiunTahunIni" text="32" styleClass="stat-number"/>
+                    <Label text="Januari - Desember 2026" styleClass="stat-detail"/>
+                </VBox>
+                
+                <VBox styleClass="stat-card-orange" prefWidth="230">
+                    <padding>
+                        <Insets top="20" right="20" bottom="20" left="20"/>
+                    </padding>
+                    <Label text="Rata-rata Masa Kerja" styleClass="stat-label"/>
+                    <Label fx:id="lblRataMasaKerja" text="28 Tahun" styleClass="stat-number"/>
+                    <Label text="Dari semua pensiunan" styleClass="stat-detail"/>
+                </VBox>
+                
+                <Region HBox.hgrow="ALWAYS"/>
+                
+            </HBox>
+
+            <!-- TABLE -->
+            <VBox styleClass="table-wrapper" VBox.vgrow="ALWAYS">
+                <padding>
+                    <Insets top="20" right="20" bottom="20" left="20"/>
+                </padding>
+                
+                <!-- Table Header Custom -->
+                <HBox styleClass="table-header-custom" spacing="20" alignment="CENTER_LEFT">
+                    <Label text="Nama" styleClass="table-header-label" prefWidth="220"/>
+                    <Label text="NIP" styleClass="table-header-label" prefWidth="150"/>
+                    <Label text="Tanggal Pensiun" styleClass="table-header-label" prefWidth="180"/>
+                    <Label text="Golongan" styleClass="table-header-label" prefWidth="120"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Label text="Status" styleClass="table-header-label" prefWidth="200"/>
+                </HBox>
+                
+                <ScrollPane fitToWidth="true" styleClass="table-scroll" VBox.vgrow="ALWAYS">
+                    <VBox fx:id="vboxListPensiunan" spacing="12" styleClass="table-content">
+                        <padding>
+                            <Insets top="15" right="0" bottom="15" left="0"/>
+                        </padding>
+                        
+                        <!-- Sample Row 1 - AKTIF -->
+                        <HBox styleClass="table-row" spacing="20" alignment="CENTER_LEFT">
+                            <padding>
+                                <Insets top="18" right="20" bottom="18" left="20"/>
+                            </padding>
+                            
+                            <VBox prefWidth="220">
+                                <Label text="Budi Pensiunan" styleClass="row-name"/>
+                                <Label text="Staff Senior" styleClass="row-position"/>
+                            </VBox>
+                            
+                            <Label text="19851212001" styleClass="row-text" prefWidth="150"/>
+                            <Label text="01 Januari 2022" styleClass="row-text" prefWidth="180"/>
+                            <Label text="IV/A" styleClass="row-text" prefWidth="120"/>
+                            
+                            <Region HBox.hgrow="ALWAYS"/>
+                            
+                            <HBox spacing="10" prefWidth="200" alignment="CENTER_LEFT">
+                                <Button text="Aktif" styleClass="status-btn-active"/>
+                                <Button text="Edit" styleClass="action-btn-edit"/>
+                                <Button text="⋮" styleClass="action-btn-more"/>
+                            </HBox>
+                        </HBox>
+                        
+                        <!-- Sample Row 2 - AKTIF -->
+                        <HBox styleClass="table-row" spacing="20" alignment="CENTER_LEFT">
+                            <padding>
+                                <Insets top="18" right="20" bottom="18" left="20"/>
+                            </padding>
+                            
+                            <VBox prefWidth="220">
+                                <Label text="Siti Rahayu" styleClass="row-name"/>
+                                <Label text="Manager Keuangan" styleClass="row-position"/>
+                            </VBox>
+                            
+                            <Label text="19780825002" styleClass="row-text" prefWidth="150"/>
+                            <Label text="15 Maret 2023" styleClass="row-text" prefWidth="180"/>
+                            <Label text="III/D" styleClass="row-text" prefWidth="120"/>
+                            
+                            <Region HBox.hgrow="ALWAYS"/>
+                            
+                            <HBox spacing="10" prefWidth="200" alignment="CENTER_LEFT">
+                                <Button text="Aktif" styleClass="status-btn-active"/>
+                                <Button text="Edit" styleClass="action-btn-edit"/>
+                                <Button text="⋮" styleClass="action-btn-more"/>
+                            </HBox>
+                        </HBox>
+                        
+                        <!-- Sample Row 3 - PENDING -->
+                        <HBox styleClass="table-row" spacing="20" alignment="CENTER_LEFT">
+                            <padding>
+                                <Insets top="18" right="20" bottom="18" left="20"/>
+                            </padding>
+                            
+                            <VBox prefWidth="220">
+                                <Label text="Ahmad Supardi" styleClass="row-name"/>
+                                <Label text="Supervisor Operasional" styleClass="row-position"/>
+                            </VBox>
+                            
+                            <Label text="19820510003" styleClass="row-text" prefWidth="150"/>
+                            <Label text="20 Juni 2024" styleClass="row-text" prefWidth="180"/>
+                            <Label text="IV/B" styleClass="row-text" prefWidth="120"/>
+                            
+                            <Region HBox.hgrow="ALWAYS"/>
+                            
+                            <HBox spacing="10" prefWidth="200" alignment="CENTER_LEFT">
+                                <Button text="Pending" styleClass="status-btn-pending"/>
+                                <Button text="Edit" styleClass="action-btn-edit"/>
+                                <Button text="⋮" styleClass="action-btn-more"/>
+                            </HBox>
+                        </HBox>
+                        
+                        <!-- Sample Row 4 - AKTIF -->
+                        <HBox styleClass="table-row" spacing="20" alignment="CENTER_LEFT">
+                            <padding>
+                                <Insets top="18" right="20" bottom="18" left="20"/>
+                            </padding>
+                            
+                            <VBox prefWidth="220">
+                                <Label text="Dewi Kartika" styleClass="row-name"/>
+                                <Label text="Admin HRD" styleClass="row-position"/>
+                            </VBox>
+                            
+                            <Label text="19831203004" styleClass="row-text" prefWidth="150"/>
+                            <Label text="10 September 2025" styleClass="row-text" prefWidth="180"/>
+                            <Label text="III/C" styleClass="row-text" prefWidth="120"/>
+                            
+                            <Region HBox.hgrow="ALWAYS"/>
+                            
+                            <HBox spacing="10" prefWidth="200" alignment="CENTER_LEFT">
+                                <Button text="Aktif" styleClass="status-btn-active"/>
+                                <Button text="Edit" styleClass="action-btn-edit"/>
+                                <Button text="⋮" styleClass="action-btn-more"/>
+                            </HBox>
+                        </HBox>
+                        
+                        <!-- Sample Row 5 - NON-AKTIF -->
+                        <HBox styleClass="table-row" spacing="20" alignment="CENTER_LEFT">
+                            <padding>
+                                <Insets top="18" right="20" bottom="18" left="20"/>
+                            </padding>
+                            
+                            <VBox prefWidth="220">
+                                <Label text="Joko Widodo" styleClass="row-name"/>
+                                <Label text="Staff IT" styleClass="row-position"/>
+                            </VBox>
+                            
+                            <Label text="19760915005" styleClass="row-text" prefWidth="150"/>
+                            <Label text="05 November 2021" styleClass="row-text" prefWidth="180"/>
+                            <Label text="II/D" styleClass="row-text" prefWidth="120"/>
+                            
+                            <Region HBox.hgrow="ALWAYS"/>
+                            
+                            <HBox spacing="10" prefWidth="200" alignment="CENTER_LEFT">
+                                <Button text="Non-Aktif" styleClass="status-btn-inactive"/>
+                                <Button text="Edit" styleClass="action-btn-edit"/>
+                                <Button text="⋮" styleClass="action-btn-more"/>
+                            </HBox>
+                        </HBox>
+                        
+                    </VBox>
+                </ScrollPane>
+            </VBox>
+            
+        </VBox>
+    </center>
 </BorderPane>

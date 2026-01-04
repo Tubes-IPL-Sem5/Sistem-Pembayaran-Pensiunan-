@@ -4,12 +4,16 @@ import com.mycompany.pensiunan.service.AuthService;
 import com.mycompany.pensiunan.model.User;
 import com.mycompany.pensiunan.util.Session;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.stage.Stage;
 
-public class loginController {
+public class LoginController {
 
     @FXML private TextField usernameField;
     @FXML private PasswordField passwordField;
@@ -25,13 +29,29 @@ public class loginController {
             showAlert("Peringatan", "Username dan Password tidak boleh kosong.");
             return;
         }
+        
+        if (username.length() < 8 || password.length() < 8) {
+            showAlert(
+                "Peringatan",
+                "Username dan Password minimal 8 karakter."
+            );
+            return;
+        }
+        
+        if (username.length() > 16 || password.length() > 16) {
+            showAlert(
+                "Peringatan",
+                "Username dan Password tidak boleh melebihi 16 karakter."
+            );
+            return;
+        }
+        
 
         User user = authService.authenticate(username, password);
 
         if (user.isAuthenticated()) {
             System.out.println("Login BERHASIL. ");
 
-            // --- LOGIKA TAMBAHAN ---
             String namaTampilan = user.getNama();
             // Jika nama null (kosong), gunakan username sebagai cadangan
             if (namaTampilan == null || namaTampilan.trim().isEmpty()) {
@@ -43,10 +63,12 @@ public class loginController {
 
             Session.setSession(
                     user.getIdAkun(),
+                    user.getIdHrd(),
+                    user.getIdKeuangan(),
                     user.getUsername(),
                     user.getPeran(),
                     user.getIdPensiunan(),
-                    namaTampilan // Masukkan nama yang sudah divalidasi
+                    namaTampilan
             );
 
             navigateToDashboard(user.getPeran());
@@ -88,4 +110,21 @@ public class loginController {
             }
         }
     }
+    
+    @FXML
+    private void handleForgotPassword() {
+        try {
+            Parent root = FXMLLoader.load(
+                getClass().getResource(
+                    "/com/mycompany/pensiunan/view/login/forgotPasswordView.fxml"
+                )
+            );
+            Stage stage = (Stage) usernameField.getScene().getWindow();
+            stage.setScene(new Scene(root));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    
 }

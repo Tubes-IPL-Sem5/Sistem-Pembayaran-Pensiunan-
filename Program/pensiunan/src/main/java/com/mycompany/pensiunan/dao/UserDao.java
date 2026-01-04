@@ -6,12 +6,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class UserDao {
 
     public User findAccountByUsername(String username) {
-        // PERBAIKAN: Join ke 3 tabel (Pensiunan, Keuangan, HRD)
-        // COALESCE akan mengambil nilai pertama yang TIDAK NULL
         String sql = """
             SELECT 
                 ap.id_akun, ap.username, ap.password, ap.peran,
@@ -53,8 +52,54 @@ public class UserDao {
         return null;
     }
 
-    // Method getPasswordHash bisa dihapus atau dibiarkan,
-    // tapi logika login utama ada di findAccountByUsername di atas.
+    public int findIdHrdByIdAkun(int idAkun) {
+        String sql = "SELECT id_hrd FROM akun_hrd WHERE id_akun = ?";
+        try (Connection c = Koneksi.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+
+            ps.setInt(1, idAkun);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("id_hrd");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+    
+    public int findIdPensiunanByIdAkun(int idAkun) {
+        String sql = "SELECT id_pensiunan FROM akun_pensiunan WHERE id_akun = ?";
+        try (Connection c = Koneksi.getConnection();
+                 PreparedStatement ps = c.prepareStatement(sql)) {
+
+                ps.setInt(1, idAkun);
+                ResultSet rs = ps.executeQuery();
+                if (rs.next()) {
+                    return rs.getInt("id_pensiunan");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return 0;
+    }
+
+    public int findIdKeuanganByIdAkun(int idAkun) {
+        String sql = "SELECT id_keuangan FROM akun_divisi_keuangan WHERE id_akun = ?";
+        try (Connection c = Koneksi.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+
+            ps.setInt(1, idAkun);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) return rs.getInt("id_keuangan");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+
     public String getPasswordHash(String username) {
         String SQL = "SELECT password FROM akun_pengguna WHERE username = ?";
         try (Connection conn = Koneksi.getConnection();
@@ -69,5 +114,28 @@ public class UserDao {
             System.err.println("Database Error saat mengambil hash: " + e.getMessage());
         }
         return null;
+    }
+    
+    public int insertPensiunan(String username, String password, String peran) throws SQLException {
+        String sql = """
+            INSERT INTO akun_pengguna (username, password, peran)
+            VALUES (?, ?, ?)
+        """;
+
+        try (Connection conn = Koneksi.getConnection();
+             PreparedStatement ps =
+                     conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            ps.setString(1, username);
+            ps.setString(2, password);
+            ps.setString(3, peran);
+            ps.executeUpdate();
+
+            ResultSet rs = ps.getGeneratedKeys();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        }
+        throw new SQLException("Gagal menyimpan akun pengguna");
     }
 }
