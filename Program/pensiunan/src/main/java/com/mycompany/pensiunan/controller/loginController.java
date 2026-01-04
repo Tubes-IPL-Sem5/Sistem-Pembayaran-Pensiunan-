@@ -9,7 +9,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
-public class LoginController {
+public class loginController {
 
     @FXML private TextField usernameField;
     @FXML private PasswordField passwordField;
