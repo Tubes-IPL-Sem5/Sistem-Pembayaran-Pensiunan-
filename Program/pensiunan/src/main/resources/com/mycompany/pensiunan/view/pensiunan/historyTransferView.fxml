@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx/25"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.mycompany.pensiunan.controller.HistoryTransferController"
+            stylesheets="@historyTransfer.css"
+            prefWidth="1200" prefHeight="700">
+    
+    <!-- SIDEBAR -->
+    <left>
+        <VBox spacing="20" styleClass="sidebar">
+            <padding>
+                <Insets top="30" right="15" bottom="30" left="15"/>
+            </padding>
+            
+            <Region VBox.vgrow="ALWAYS"/>
+            
+            <Button styleClass="sidebar-btn" 
+                    onAction="#handleBack"
+                    text="&lt;" fx:id="btnBack"/>
+            
+            <Button fx:id="btnLogout" 
+                    onAction="#handleLogout"
+                    styleClass="sidebar-btn-logout" text="⎋"/>
+        </VBox>
+    </left>
+    
+    <!-- MAIN CONTENT AREA -->
+    <center>
+        <BorderPane>
+            <!-- HEADER -->
+            <top>
+                <HBox spacing="20" alignment="CENTER_LEFT" styleClass="header">
+                    <padding>
+                        <Insets top="20" right="40" bottom="20" left="40"/>
+                    </padding>
+                    
+                    <VBox>
+                        <Label text="History Transfer" styleClass="header-title"/>
+                        <Label text="Riwayat Pembayaran Gaji Pensiun" styleClass="header-subtitle"/>
+                    </VBox>
+                    
+                    <Region HBox.hgrow="ALWAYS"/>
+                    
+                    <Label fx:id="lblNama" text="Jack Lang" styleClass="header-name"/>
+                </HBox>
+            </top>
+            
+            <!-- CENTER CONTENT -->
+            <center>
+                <AnchorPane styleClass="main-content">
+                    <VBox spacing="25" AnchorPane.topAnchor="30" AnchorPane.leftAnchor="40" AnchorPane.rightAnchor="40" AnchorPane.bottomAnchor="30">
+                        
+                        <!-- FILTER SECTION -->
+                        <HBox spacing="30" alignment="CENTER_LEFT" styleClass="filter-container">
+                            <padding>
+                                <Insets top="20" right="30" bottom="20" left="30"/>
+                            </padding>
+                            
+                            <VBox spacing="8">
+                                <Label text="Cari Transaksi" styleClass="filter-label"/>
+                                <TextField fx:id="txtSearch" promptText="Cari berdasarkan tanggal atau jumlah..." styleClass="search-field" prefWidth="300"/>
+                            </VBox>
+                            
+                            <VBox spacing="8">
+                                <Label text="Filter Status" styleClass="filter-label"/>
+                                <ComboBox fx:id="cmbStatus" promptText="Semua Status" styleClass="filter-combo" prefWidth="200"/>
+                            </VBox>
+                            
+                            <VBox spacing="8">
+                                <Label text="Filter Bulan" styleClass="filter-label"/>
+                                <ComboBox fx:id="cmbBulan" promptText="Semua Bulan" styleClass="filter-combo" prefWidth="200"/>
+                            </VBox>
+                            
+                            <Region HBox.hgrow="ALWAYS"/>
+                            
+                            <VBox alignment="BOTTOM_CENTER">
+                                <Button text="Reset Filter" styleClass="reset-button" fx:id="btnReset" prefWidth="200"/>
+                            </VBox>
+                        </HBox>
+                        
+                        <!-- SUMMARY CARDS -->
+                        <HBox spacing="20">
+                            <VBox styleClass="summary-card-green" prefWidth="250">
+                                <padding>
+                                    <Insets top="20" right="20" bottom="20" left="20"/>
+                                </padding>
+                                <Label text="Total Diterima" styleClass="summary-label"/>
+                                <Label fx:id="lblTotalDiterima" text="Rp 84.000.000" styleClass="summary-amount"/>
+                            </VBox>
+                            
+                            <VBox styleClass="summary-card-blue" prefWidth="250">
+                                <padding>
+                                    <Insets top="20" right="20" bottom="20" left="20"/>
+                                </padding>
+                                <Label text="Bulan Ini" styleClass="summary-label"/>
+                                <Label fx:id="lblBulanIni" text="Rp 7.000.000" styleClass="summary-amount"/>
+                                <Label text="Januari 2026" styleClass="summary-detail"/>
+                            </VBox>
+                            
+                            <VBox styleClass="summary-card-orange" prefWidth="250">
+                                <padding>
+                                    <Insets top="20" right="20" bottom="20" left="20"/>
+                                </padding>
+                                <Label text="Rata-rata" styleClass="summary-label"/>
+                                <Label fx:id="lblRataRata" text="Rp 7.000.000" styleClass="summary-amount"/>
+                            </VBox>
+                        </HBox>
+                        
+                        <!-- HISTORY TABLE -->
+                        <VBox styleClass="table-container" VBox.vgrow="ALWAYS">
+                            <padding>
+                                <Insets top="20" right="20" bottom="20" left="20"/>
+                            </padding>
+                            
+                            <!-- Table Header -->
+                            <HBox styleClass="table-header" spacing="20">
+                                <Label text="Tanggal" styleClass="table-header-text" prefWidth="150"/>
+                                <Label text="Periode" styleClass="table-header-text" prefWidth="150"/>
+                                <Label text="Jumlah Transfer" styleClass="table-header-text" prefWidth="200"/>
+                                <Label text="Status" styleClass="table-header-text" prefWidth="150"/>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <Label text="Aksi" styleClass="table-header-text" prefWidth="100"/>
+                            </HBox>
+                            
+                            <!-- Scrollable Content -->
+                            <ScrollPane fitToWidth="true" styleClass="scroll-pane" VBox.vgrow="ALWAYS">
+                                <VBox fx:id="vboxHistoryList" spacing="12" styleClass="history-list">
+                                    <padding>
+                                        <Insets top="15" right="0" bottom="15" left="0"/>
+                                    </padding>
+                                </VBox>
+                            </ScrollPane>
+                        </VBox>
+                        
+                    </VBox>
+                </AnchorPane>
+            </center>
+        </BorderPane>
+    </center>
+</BorderPane>

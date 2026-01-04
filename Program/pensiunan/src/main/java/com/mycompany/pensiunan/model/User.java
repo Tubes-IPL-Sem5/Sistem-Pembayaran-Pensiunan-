@@ -3,11 +3,13 @@ package com.mycompany.pensiunan.model;
 public class User {
 
     private int idAkun;
+    private int idHrd;
     private int idPensiunan;
     private String username;
     private String peran;
     private String nama;
     private boolean authenticated;
+    private int idKeuangan;
 
     public User(boolean authenticated) {
         this.authenticated = authenticated;
@@ -54,9 +56,24 @@ public class User {
         return passwordHash;
     }
 
+    public int getIdKeuangan() { return idKeuangan; }
+    public void setIdKeuangan(int idKeuangan) { this.idKeuangan = idKeuangan; }
 
+    
     public int getIdAkun() {
         return idAkun;
+    }
+    
+    public int getIdHrd() {
+        return idHrd;
+    }
+
+    public void setIdHrd(int idHrd) {
+        this.idHrd = idHrd;
+    }
+    
+    public void setIdPensiunan(int idPensiunan) {
+        this.idPensiunan = idPensiunan;
     }
 
     public int getIdPensiunan() {

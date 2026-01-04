@@ -9,56 +9,34 @@ import java.util.List;
 
 public class KeuanganDao {
 
-    public List<Keuangan> getAllTransaksi() {
+   public List<Keuangan> getAllTransaksi() {
         List<Keuangan> list = new ArrayList<>();
 
         String sql = """
-            SELECT 
-                g.id_gaji_pensiunan AS id_transaksi,
-                p.id_pensiunan,
-                p.nama, 
-                p.nip, 
-                p.golongan, 
-                p.tanggal_pensiun,
-                g.jumlah_gaji AS nominal, 
-                g.status_perhitungan 
-            FROM gaji_pensiunan g
-            JOIN akun_pensiunan p ON g.id_pensiunan = p.id_pensiunan
+            SELECT p.id_pensiunan, p.nama, p.nip,
+                   COALESCE(MAX(h.jumlah),0) AS terakhir,
+                   0 AS akan,
+                   p.golongan,
+                   'Menunggu' AS status
+            FROM akun_pensiunan p
+            LEFT JOIN history_pembayaran h
+                   ON p.id_pensiunan = h.id_pensiunan
+            GROUP BY p.id_pensiunan
         """;
 
-        System.out.println("DEBUG DAO: Menjalankan Query getAllTransaksi...");
-
-        try (Connection conn = Koneksi.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
+        try (Connection c = Koneksi.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
-                // 1. Parsing Golongan ke Angka
-                int gol = 1;
-                try {
-                    String gStr = rs.getString("golongan");
-                    if(gStr != null) {
-                        if(gStr.startsWith("IV")) gol = 4;
-                        else if(gStr.startsWith("III")) gol = 3;
-                        else if(gStr.startsWith("II")) gol = 2;
-                    }
-                } catch (Exception e) { gol = 1; }
-
-                // 2. LOGIKA HITUNG OTOMATIS (PERBAIKAN DISINI)
-                // Rumus: 1.500.000 + (Golongan * 500.000)
-                double nominalLalu = rs.getDouble("nominal");
-                double nominalHitung = 1500000 + (gol * 500000);
-
                 list.add(new Keuangan(
-                        rs.getInt("id_transaksi"),
                         rs.getInt("id_pensiunan"),
                         rs.getString("nama"),
                         rs.getString("nip"),
-                        rs.getString("tanggal_pensiun"),
-                        nominalLalu,   // Nominal Terakhir (Data Asli DB)
-                        nominalHitung, // Nominal Akan (HASIL HITUNGAN RUMUS)
-                        gol,
-                        "Menunggu"
+                        rs.getDouble("terakhir"),
+                        rs.getDouble("akan"),
+                        Integer.parseInt(rs.getString("golongan")),
+                        rs.getString("status")
                 ));
             }
         } catch (SQLException e) {
@@ -67,29 +45,93 @@ public class KeuanganDao {
         return list;
     }
 
-    // FUNGSI SIMPAN (Tetap Sama)
-    public boolean simpanPembayaran(int idPensiunan, int idStaffKeuangan, double jumlah, String status) {
-        String sqlInsert = "INSERT INTO pembayaran (id_pensiunan, id_keuangan, tanggal, jumlah, status_pembayaran) VALUES (?, ?, ?, ?, ?)";
 
-        try (Connection conn = Koneksi.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sqlInsert)) {
+    public boolean simpanPembayaran(
+              int idPensiunan,
+              int idKeuangan,
+              double jumlah,
+              String status
+      ) {
+          Connection conn = null;
 
-            ps.setInt(1, idPensiunan);
-            ps.setInt(2, idStaffKeuangan);
-            ps.setDate(3, Date.valueOf(LocalDate.now()));
-            ps.setDouble(4, jumlah);
-            ps.setString(5, status);
+          try {
+              conn = Koneksi.getConnection();
+              conn.setAutoCommit(false);
+              
+              String sqlPembayaran = """
+                  INSERT INTO pembayaran
+                  (id_pensiunan, id_keuangan, tanggal, jumlah, status_pembayaran)
+                  VALUES (?, ?, CURDATE(), ?, ?)
+              """;
 
-            int rows = ps.executeUpdate();
+              PreparedStatement psBayar =
+                      conn.prepareStatement(sqlPembayaran, Statement.RETURN_GENERATED_KEYS);
 
-            if (rows > 0) {
-                System.out.println("DEBUG DAO: Berhasil simpan pembayaran ID: " + idPensiunan + " Status: " + status);
-                return true;
-            }
-        } catch (SQLException e) {
-            System.err.println("ERROR DAO SIMPAN: " + e.getMessage());
-            e.printStackTrace();
-        }
-        return false;
-    }
+              psBayar.setInt(1, idPensiunan);
+              psBayar.setInt(2, idKeuangan);
+              psBayar.setDouble(3, jumlah);
+              psBayar.setString(4, status);
+
+              int rows = psBayar.executeUpdate();
+              if (rows == 0) {
+                  conn.rollback();
+                  return false;
+              }
+
+              ResultSet rs = psBayar.getGeneratedKeys();
+              if (!rs.next()) {
+                  conn.rollback();
+                  return false;
+              }
+
+              int idPembayaran = rs.getInt(1);
+
+              // 2. INSERT history_pembayaran
+              String sqlHistory = """
+                  INSERT INTO history_pembayaran
+                  (id_pembayaran, id_pensiunan, tanggal, jumlah, status)
+                  VALUES (?, ?, CURDATE(), ?, ?)
+              """;
+
+              PreparedStatement psHist = conn.prepareStatement(sqlHistory);
+              psHist.setInt(1, idPembayaran);
+              psHist.setInt(2, idPensiunan);
+              psHist.setDouble(3, jumlah);
+              psHist.setString(4, status);
+
+              psHist.executeUpdate();
+
+              // 3. INSERT gaji_pensiunan (HANYA JIKA BERHASIL)
+              if ("BERHASIL".equals(status)) {
+
+                  String sqlGaji = """
+                      INSERT INTO gaji_pensiunan
+                      (id_pensiunan, tanggal, jumlah_gaji, status_perhitungan)
+                      VALUES (?, CURDATE(), ?, 'SELESAI')
+                  """;
+
+                  PreparedStatement psGaji = conn.prepareStatement(sqlGaji);
+                  psGaji.setInt(1, idPensiunan);
+                  psGaji.setDouble(2, jumlah);
+
+                  psGaji.executeUpdate();
+              }
+
+              conn.commit();
+              return true;
+
+          } catch (SQLException e) {
+              try {
+                  if (conn != null) conn.rollback();
+              } catch (SQLException ignored) {}
+              e.printStackTrace();
+              return false;
+
+          } finally {
+              try {
+                  if (conn != null) conn.setAutoCommit(true);
+              } catch (SQLException ignored) {}
+          }
+      }
+
 }

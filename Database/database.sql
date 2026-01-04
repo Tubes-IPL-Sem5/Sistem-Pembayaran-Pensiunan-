@@ -1,6 +1,6 @@
 CREATE TABLE akun_pengguna (
     id_akun INT AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(50) NOT NULL UNIQUE,
+    username VARCHAR(16) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     peran ENUM('PENSIUNAN','HRD','KEUANGAN') NOT NULL
 );
@@ -30,7 +30,7 @@ CREATE TABLE akun_pensiunan (
     nip VARCHAR(20) NOT NULL UNIQUE,
     nama VARCHAR(100) NOT NULL,
     tanggal_pensiun DATE NOT NULL,
-    golongan VARCHAR(10) NOT NULL,
+    golongan ENUM('1','2','3','4') NOT NULL,
     masa_kerja INT NOT NULL,
     CONSTRAINT fk_pensiunan_akun
         FOREIGN KEY (id_akun) REFERENCES akun_pengguna(id_akun)

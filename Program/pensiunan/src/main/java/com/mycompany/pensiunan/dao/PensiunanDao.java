@@ -62,43 +62,42 @@ public class PensiunanDao {
 }
 
     public boolean insertPensiunan(Pensiunan p, String username, String passwordHash, int idHrd) {
-    Connection conn = Koneksi.getConnection();
-    String sqlAkun = "INSERT INTO akun_pengguna (username, password, peran) VALUES (?, ?, 'PENSIUNAN')";
-    String sqlProfil = "INSERT INTO akun_pensiunan (id_akun, id_hrd, nip, nama, tanggal_pensiun, golongan, masa_kerja) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        Connection conn = Koneksi.getConnection();
+        String sqlAkun = "INSERT INTO akun_pengguna (username, password, peran) VALUES (?, ?, 'PENSIUNAN')";
+        String sqlProfil = "INSERT INTO akun_pensiunan (id_akun, id_hrd, nip, nama, tanggal_pensiun, golongan, masa_kerja) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-    try {
-        conn.setAutoCommit(false); // Mulai transaksi
+        try {
+            conn.setAutoCommit(false); // Mulai transaksi
 
-        // 1. Simpan ke akun_pengguna
-        PreparedStatement psAkun = conn.prepareStatement(sqlAkun, Statement.RETURN_GENERATED_KEYS);
-        psAkun.setString(1, username);
-        psAkun.setString(2, passwordHash);
-        psAkun.executeUpdate();
+            PreparedStatement psAkun = conn.prepareStatement(sqlAkun, Statement.RETURN_GENERATED_KEYS);
+            psAkun.setString(1, username);
+            psAkun.setString(2, passwordHash);
+            psAkun.executeUpdate();
 
-        // Ambil ID akun yang baru saja dibuat
-        ResultSet rs = psAkun.getGeneratedKeys();
-        if (rs.next()) {
-            int idAkunBaru = rs.getInt(1);
+            // Ambil ID akun yang baru saja dibuat
+            ResultSet rs = psAkun.getGeneratedKeys();
+            if (rs.next()) {
+                int idAkunBaru = rs.getInt(1);
 
-            // 2. Simpan ke akun_pensiunan
-            PreparedStatement psProfil = conn.prepareStatement(sqlProfil);
-            psProfil.setInt(1, idAkunBaru);
-            psProfil.setInt(2, idHrd);
-            psProfil.setString(3, p.getNip());
-            psProfil.setString(4, p.getNama());
-            psProfil.setDate(5, java.sql.Date.valueOf(p.getTanggalPensiun()));
-            psProfil.setString(6, p.getGolongan());
-            psProfil.setInt(7, p.getMasaKerja());
-            psProfil.executeUpdate();
+                // 2. Simpan ke akun_pensiunan
+                PreparedStatement psProfil = conn.prepareStatement(sqlProfil);
+                psProfil.setInt(1, idAkunBaru);
+                psProfil.setInt(2, idHrd);
+                psProfil.setString(3, p.getNip());
+                psProfil.setString(4, p.getNama());
+                psProfil.setDate(5, java.sql.Date.valueOf(p.getTanggalPensiun()));
+                psProfil.setString(6, p.getGolongan());
+                psProfil.setInt(7, p.getMasaKerja());
+                psProfil.executeUpdate();
+            }
+
+            conn.commit(); // Simpan permanen jika semua berhasil
+            return true;
+        } catch (SQLException e) {
+            try { conn.rollback(); } catch (SQLException ex) { ex.printStackTrace(); }
+            e.printStackTrace();
+            return false;
         }
-
-        conn.commit(); // Simpan permanen jika semua berhasil
-        return true;
-    } catch (SQLException e) {
-        try { conn.rollback(); } catch (SQLException ex) { ex.printStackTrace(); }
-        e.printStackTrace();
-        return false;
     }
-}
     
 }
