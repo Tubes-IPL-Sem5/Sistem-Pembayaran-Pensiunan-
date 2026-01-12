@@ -74,12 +74,10 @@ public class PensiunanDao {
             psAkun.setString(2, passwordHash);
             psAkun.executeUpdate();
 
-            // Ambil ID akun yang baru saja dibuat
             ResultSet rs = psAkun.getGeneratedKeys();
             if (rs.next()) {
                 int idAkunBaru = rs.getInt(1);
 
-                // 2. Simpan ke akun_pensiunan
                 PreparedStatement psProfil = conn.prepareStatement(sqlProfil);
                 psProfil.setInt(1, idAkunBaru);
                 psProfil.setInt(2, idHrd);
@@ -91,7 +89,7 @@ public class PensiunanDao {
                 psProfil.executeUpdate();
             }
 
-            conn.commit(); // Simpan permanen jika semua berhasil
+            conn.commit(); 
             return true;
         } catch (SQLException e) {
             try { conn.rollback(); } catch (SQLException ex) { ex.printStackTrace(); }
@@ -100,4 +98,62 @@ public class PensiunanDao {
         }
     }
     
+    public boolean deleteByNip(String nip) {
+    String sqlInfo = "SELECT id_pensiunan, id_akun FROM akun_pensiunan WHERE nip = ?";
+    String sqlHapusHistory = "DELETE FROM history_pembayaran WHERE id_pensiunan = ?";
+    String sqlHapusPembayaran = "DELETE FROM pembayaran WHERE id_pensiunan = ?";
+    String sqlHapusGaji = "DELETE FROM gaji_pensiunan WHERE id_pensiunan = ?";
+    String sqlHapusProfil = "DELETE FROM akun_pensiunan WHERE nip = ?";
+    String sqlHapusAkun = "DELETE FROM akun_pengguna WHERE id_akun = ?";
+
+    try (Connection conn = Koneksi.getConnection()) {
+        conn.setAutoCommit(false); // MULAI TRANSAKSI
+
+        int idPensiunan = -1;
+        int idAkun = -1;
+
+        try (PreparedStatement psInfo = conn.prepareStatement(sqlInfo)) {
+            psInfo.setString(1, nip);
+            ResultSet rs = psInfo.executeQuery();
+            if (rs.next()) {
+                idPensiunan = rs.getInt("id_pensiunan");
+                idAkun = rs.getInt("id_akun");
+            }
+        }
+
+        if (idPensiunan != -1) {
+            try (PreparedStatement ps1 = conn.prepareStatement(sqlHapusHistory)) {
+                ps1.setInt(1, idPensiunan);
+                ps1.executeUpdate();
+            }
+
+            try (PreparedStatement ps2 = conn.prepareStatement(sqlHapusPembayaran)) {
+                ps2.setInt(1, idPensiunan);
+                ps2.executeUpdate();
+            }
+
+            try (PreparedStatement ps3 = conn.prepareStatement(sqlHapusGaji)) {
+                ps3.setInt(1, idPensiunan);
+                ps3.executeUpdate();
+            }
+
+            try (PreparedStatement ps4 = conn.prepareStatement(sqlHapusProfil)) {
+                ps4.setString(1, nip);
+                ps4.executeUpdate();
+            }
+
+            try (PreparedStatement ps5 = conn.prepareStatement(sqlHapusAkun)) {
+                ps5.setInt(1, idAkun);
+                ps5.executeUpdate();
+            }
+
+            conn.commit(); 
+            return true;
+        }
+        return false;
+    } catch (SQLException e) {
+        e.printStackTrace();
+        return false;
+    }
+}
 }

@@ -134,25 +134,64 @@ public class HrdController implements Initializable {
         lblGolongan.setPrefWidth(120);
         lblGolongan.getStyleClass().add("row-text");
 
-        Button btnStatus = new Button("Pensiun");
-        btnStatus.setPrefWidth(200);
-        btnStatus.getStyleClass().add("status-btn-inactive");
+        Button btnStatus = new Button("Aktif");
+        btnStatus.setPrefWidth(160); 
+        btnStatus.getStyleClass().add("status-btn-active");
+        btnStatus.setOnAction(event -> {
+            if (btnStatus.getText().equals("Aktif")) {
+                btnStatus.setText("Non-Aktif");
+                btnStatus.getStyleClass().remove("status-btn-active");
+                btnStatus.getStyleClass().add("status-btn-inactive");
+            } else {
+                btnStatus.setText("Aktif");
+                btnStatus.getStyleClass().remove("status-btn-inactive");
+                btnStatus.getStyleClass().add("status-btn-active");
+            }
+        });
+
+        Button btnDelete = new Button("🗑");
+        btnDelete.getStyleClass().add("action-btn-delete"); 
+        btnDelete.setTooltip(new Tooltip("Hapus Data"));
+
+        btnDelete.setOnAction(event -> {
+            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+            confirm.setTitle("Konfirmasi Hapus");
+            confirm.setHeaderText(null);
+            confirm.setContentText("Hapus data " + p.getNama() + " (NIP: " + p.getNip() + ")?");
+
+            confirm.showAndWait().ifPresent(response -> {
+                if (response == ButtonType.OK) {
+                    boolean success = hrdService.hapusPensiunan(p.getNip());
+                    if (success) {
+                        loadPensiunan(); 
+                        loadStatistik(); 
+                    } else {
+                        showAlert(Alert.AlertType.ERROR, "Gagal", "Data gagal dihapus dari database.");
+                    }
+                }
+            });
+        });
+
+        javafx.scene.layout.Region spacer = new javafx.scene.layout.Region();
+        javafx.scene.layout.HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
 
         HBox row = new HBox(
             lblNama,
             lblNip,
             lblTanggal,
             lblGolongan,
-            btnStatus
+            spacer, 
+            btnStatus,
+            btnDelete
         );
 
         row.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
-        row.setSpacing(20);
+        row.setSpacing(15);
         row.setPadding(new javafx.geometry.Insets(18, 20, 18, 20));
         row.getStyleClass().add("table-row");
 
         return row;
-    }
+}
 
 
     
@@ -262,7 +301,6 @@ public class HrdController implements Initializable {
             return;
         }
 
-        // ===== BUAT MODEL =====
         Pensiunan p = new Pensiunan(
                 txtNip.getText(),
                 txtNama.getText(),
@@ -291,6 +329,7 @@ public class HrdController implements Initializable {
                     "Data pensiunan berhasil disimpan");
             sembunyikanForm();
             loadPensiunan();
+            loadStatistik();
         } else {
             showAlert(Alert.AlertType.ERROR,
                     "Gagal",
@@ -341,4 +380,17 @@ public class HrdController implements Initializable {
         alert.setContentText(msg);
         alert.showAndWait();
     }
+    
+    private void updateButtonStyle(Button btn, String status) {
+    btn.getStyleClass().removeAll("status-btn-active", "status-btn-inactive");
+
+    if (status.equalsIgnoreCase("Aktif")) {
+        btn.setText("Aktif");
+        btn.getStyleClass().add("status-btn-active"); // Ini yang akan jadi HIJAU di CSS
+    } else {
+        btn.setText("Non-Aktif");
+        btn.getStyleClass().add("status-btn-inactive"); // Ini yang akan jadi MERAH di CSS
+    }
 }
+}
+
