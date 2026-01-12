@@ -404,3 +404,29 @@
 .action-btn-more:hover {
     -fx-background-color: #eeeeee;
 }
+
+.status-btn-active {
+    -fx-background-color: #2D6A4F; 
+    -fx-text-fill: white;
+    -fx-background-radius: 8;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.status-btn-inactive {
+    -fx-background-color: #A4161A; 
+    -fx-text-fill: white;
+    -fx-background-radius: 8;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.action-btn-delete {
+    -fx-background-color: #ff4d4d;
+    -fx-text-fill: white;
+    -fx-cursor: hand;
+    -fx-background-radius: 5;
+}
+.action-btn-delete:hover {
+    -fx-background-color: #ff1a1a;
+}

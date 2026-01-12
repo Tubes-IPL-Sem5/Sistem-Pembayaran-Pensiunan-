@@ -46,4 +46,10 @@ public class HrdService {
                 idHrd
         );
     }
+    
+    public boolean hapusPensiunan(String nip) {
+        return pensiunanDao.deleteByNip(nip);
+    }
 }
+
+
